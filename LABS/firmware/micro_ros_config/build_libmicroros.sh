@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Genera firmware/libmicroros usando la imagen oficial micro-ROS (ROS 2 Humble).
+# Genera LABS/firmware/libmicroros (ruta relativa al clon) usando la imagen oficial micro-ROS (ROS 2 Humble).
 # Requisitos: git, docker. Ejecutar desde cualquier directorio; el script se auto-ubica.
 set -euo pipefail
 

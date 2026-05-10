@@ -1,8 +1,10 @@
 # micro-ROS: Raspberry Pi Pico 2 W + HC-SR04 (ROS 2 Humble)
 
-Demostración: firmware en C que publica `sensor_msgs/msg/Range` en `/ultrasonic/range` por USB-serial con **micro-ROS Agent**, y un nodo Python opcional (`range_visualizer`). Incluye un **[example/](example/)** mínimo que publica `std_msgs/msg/Int32` en `/pico_connection_test` para validar enlace **sin** sensor.
+Todo el laboratorio (firmware, example, `ros2_ws`, documentación) está en la carpeta **[LABS/](LABS/)**. En la raíz del repositorio solo permanece este **README.md**.
 
-**Arquitectura y convenciones:** [docs/architecture.md](docs/architecture.md) · **Cableado:** [docs/wiring.md](docs/wiring.md) · **Pruebas:** [docs/test-plan.md](docs/test-plan.md)
+Demostración: firmware en C que publica `sensor_msgs/msg/Range` en `/ultrasonic/range` por USB-serial con **micro-ROS Agent**, y un nodo Python opcional (`range_visualizer`). Incluye un **[LABS/example/](LABS/example/)** mínimo que publica `std_msgs/msg/Int32` en `/pico_connection_test` para validar enlace **sin** sensor.
+
+**Arquitectura y convenciones:** [LABS/docs/architecture.md](LABS/docs/architecture.md) · **Cableado:** [LABS/docs/wiring.md](LABS/docs/wiring.md) · **Pruebas:** [LABS/docs/test-plan.md](LABS/docs/test-plan.md)
 
 ---
 
@@ -24,10 +26,10 @@ Demostración: firmware en C que publica `sensor_msgs/msg/Range` en `/ultrasonic
 
 | Ruta | Rol |
 |------|-----|
-| [firmware/](firmware/) | Firmware principal: HC-SR04 + micro-ROS → `/ultrasonic/range` |
-| [example/](example/) | Firmware mínimo: solo enlace → `/pico_connection_test` ([example/README.md](example/README.md)) |
-| [ros2_ws/](ros2_ws/) | Paquete Python `range_visualizer` (host ROS 2) |
-| [docs/](docs/) | Arquitectura, cableado, plan de pruebas |
+| [LABS/firmware/](LABS/firmware/) | Firmware principal: HC-SR04 + micro-ROS → `/ultrasonic/range` |
+| [LABS/example/](LABS/example/) | Firmware mínimo: solo enlace → `/pico_connection_test` ([LABS/example/README.md](LABS/example/README.md)) |
+| [LABS/ros2_ws/](LABS/ros2_ws/) | Paquete Python `range_visualizer` (host ROS 2) |
+| [LABS/docs/](LABS/docs/) | Arquitectura, cableado, plan de pruebas |
 
 Cadena lógica: **Pico (C + micro-ROS)** → **USB serial** → **micro-ROS Agent** → **ROS 2 Humble** en el host (tópicos DDS).
 
@@ -37,8 +39,8 @@ Cadena lógica: **Pico (C + micro-ROS)** → **USB serial** → **micro-ROS Agen
 
 - **Toolchain ARM** (`arm-none-eabi-gcc`, `newlib`), **CMake**, **Ninja**, **Git**, **Python 3**
 - **[Pico SDK](https://github.com/raspberrypi/pico-sdk)** clonado y variable de entorno `PICO_SDK_PATH`
-- **Docker** (recomendado) para el script que genera `firmware/libmicroros/`, o una carpeta `libmicroros` copiada desde otro build compatible con Humble
-- En el **mismo Linux** donde corre ROS 2 (o accesible por red `localhost`): **micro-ROS Agent** y, si quieres, el workspace `ros2_ws` con `colcon`
+- **Docker** (recomendado) para el script que genera `LABS/firmware/libmicroros/`, o una carpeta `libmicroros` copiada desde otro build compatible con Humble
+- En el **mismo Linux** donde corre ROS 2 (o accesible por red `localhost`): **micro-ROS Agent** y, si quieres, el workspace `LABS/ros2_ws` con `colcon`
 
 ROS 2 **Humble** está soportado de forma oficial sobre **Ubuntu 22.04**. Por eso en **Windows** se recomienda **WSL2 con Ubuntu 22.04**; en **Arch** puedes compilar el firmware en el host y usar **Distrobox + Ubuntu 22.04** solo para ROS 2 y el agente (o instalar ROS 2 en Arch vía [AUR](https://wiki.archlinux.org/title/ROS) / contenedores, a tu elección).
 
@@ -130,7 +132,7 @@ sudo usermod -aG docker $USER
 
 Opción recomendada: el clon del repo vive en tu `$HOME` de Arch y entras con **home montado** (Distrobox monta el home del host por defecto). Así **Cursor en Arch** abre la misma carpeta que ves en `distrobox enter`.
 
-Si clonaste en `~/proyectos/MICRO-ROS-EMB`, desde dentro del contenedor deberías ver la misma ruta bajo tu home.
+Si clonaste en `~/proyectos/MICRO-ROS-EMB`, el código del laboratorio está en `~/proyectos/MICRO-ROS-EMB/LABS`; desde dentro del contenedor deberías ver la misma ruta bajo tu home.
 
 ### B.4 Compilar firmware: ¿dentro o fuera del contenedor?
 
@@ -188,10 +190,10 @@ Evita compilar proyectos grandes solo en `/mnt/c/...` (OneDrive puede ralentizar
 ```bash
 mkdir -p ~/repos && cd ~/repos
 git clone https://github.com/TU_USUARIO/ROS2-MICRO-ROS-LEARNING-HUB.git
-cd ROS2-MICRO-ROS-LEARNING-HUB
+cd ROS2-MICRO-ROS-LEARNING-HUB/LABS
 ```
 
-(Sustituye la URL por la de tu fork o clon.)
+(Sustituye la URL por la de tu fork o clon. Los comandos de compilación y ROS 2 de este README asumen que tu directorio de trabajo actual es **`LABS/`** — usa `cd …/LABS` tras clonar.)
 
 ### C.4 ROS 2 Humble en WSL
 
@@ -244,9 +246,17 @@ Continúa en [Flujo común](#flujo-común-libmicroros-firmware-flash-agente-ros-
 
 Los pasos siguientes son los mismos en **Arch**, **Distrobox Ubuntu** o **WSL**, salvo rutas y el dispositivo serie.
 
+Sitúate en la carpeta del laboratorio (hija de la raíz del clon):
+
+```bash
+cd LABS
+```
+
+(En adelante, las rutas `firmware/`, `example/` y `ros2_ws/` son relativas a **`LABS/`**.)
+
 ### 1. Generar `libmicroros` (Humble)
 
-Desde la **raíz del repositorio** (con Docker disponible):
+Con Docker disponible, **desde `LABS/`**:
 
 ```bash
 chmod +x firmware/micro_ros_config/build_libmicroros.sh
@@ -267,7 +277,7 @@ ninja
 
 Salida esperada: `pico_sonar_node.uf2` (y `.elf`). Para **Pico** clásica: `-DPICO_BOARD=pico`.
 
-> **RP2350 (Pico 2 W):** si falla compilación o enlace, revisa [docs/architecture.md](docs/architecture.md) (plan B).
+> **RP2350 (Pico 2 W):** si falla compilación o enlace, revisa [LABS/docs/architecture.md](LABS/docs/architecture.md) (plan B).
 
 ### 3. Flashear
 
@@ -294,6 +304,8 @@ ros2 topic echo /ultrasonic/range
 
 ### 6. Nodo `range_visualizer` (opcional)
 
+Desde **`LABS/`** (si acabas de compilar firmware, `cd ..` dos veces hasta estar en `LABS`, o abre una nueva terminal en `LABS`):
+
 ```bash
 cd ros2_ws
 source /opt/ros/humble/setup.bash
@@ -310,10 +322,10 @@ ros2 run range_visualizer range_visualizer --ros-args -p mode:=grid
 
 | Objetivo | Directorio | Tópico de prueba |
 |----------|------------|------------------|
-| Solo enlace micro-ROS + agente + ROS 2 | [example/](example/) | `/pico_connection_test` (`std_msgs/msg/Int32`) |
-| HC-SR04 + publicación continua | [firmware/](firmware/) | `/ultrasonic/range` (`sensor_msgs/msg/Range`) |
+| Solo enlace micro-ROS + agente + ROS 2 | [LABS/example/](LABS/example/) | `/pico_connection_test` (`std_msgs/msg/Int32`) |
+| HC-SR04 + publicación continua | [LABS/firmware/](LABS/firmware/) | `/ultrasonic/range` (`sensor_msgs/msg/Range`) |
 
-Instrucciones detalladas del example: [example/README.md](example/README.md).
+Instrucciones detalladas del example: [LABS/example/README.md](LABS/example/README.md).
 
 ---
 
@@ -322,7 +334,7 @@ Instrucciones detalladas del example: [example/README.md](example/README.md).
 ### Windows + WSL2
 
 1. Instala la extensión **WSL** (Remote Development) en VS Code; en Cursor suele existir soporte equivalente para abrir carpeta en WSL.
-2. **Abrir carpeta en WSL:** `Ctrl+Shift+P` → “WSL: Open Folder in WSL…” → elige `~/repos/.../ROS2-MICRO-ROS-LEARNING-HUB` (o el nombre de tu clon).
+2. **Abrir carpeta en WSL:** `Ctrl+Shift+P` → “WSL: Open Folder in WSL…” → elige `~/repos/.../ROS2-MICRO-ROS-LEARNING-HUB/LABS` si quieres el laboratorio como raíz del workspace, o la raíz del clon si prefieres ver también el README de la raíz.
 3. Así **editas y ejecutas terminales integradas** en la misma Ubuntu donde están `colcon`, `ros2` y (si configuraste) Docker.
 4. Si abres desde `\\wsl$\Ubuntu-22.04\home\...` sin modo remoto, la integración de terminal puede seguir siendo la de Windows: para compilar ROS y usar el agente, abre terminal **dentro de WSL** (`wsl` en PowerShell o pestaña WSL en el IDE).
 
@@ -344,9 +356,9 @@ Es posible instalar ARM GCC y CMake en Windows nativo, pero este README prioriza
 | `push` rechazado en GitHub | El remoto tiene commits iniciales; `git pull origin main --allow-unrelated-histories` o acordar historial con `--force` solo si aceptas sobrescribir el remoto. |
 | No existe `/dev/ttyACM0` en WSL | **usbipd-win**: bind + attach del bus correcto tras enchufar la Pico. |
 | `Permission denied` en el puerto serie | En Linux: usuario en grupo `dialout`; en Docker agent: `--privileged` y `-v /dev:/dev` como en el ejemplo. |
-| ROS 2 no encuentra paquetes | `source /opt/ros/humble/setup.bash` y, tras `colcon build`, `source install/setup.bash` desde `ros2_ws`. |
+| ROS 2 no encuentra paquetes | `source /opt/ros/humble/setup.bash` y, tras `colcon build`, `source install/setup.bash` desde `LABS/ros2_ws`. |
 | LF/CRLF warnings en Git | Normal en Windows; no impiden el commit. Opcional: `git config core.autocrlf true` en Windows. |
-| Build lento bajo OneDrive | Clona o copia el repo a disco local/WSL fuera de sincronización pesada para `build/` y `libmicroros`. |
+| Build lento bajo OneDrive | Clona el repo a disco local/WSL y trabaja en `LABS/`; evita compilar solo bajo `C:\Users\...\OneDrive\...` si va lento (`LABS/firmware/build/`, `LABS/firmware/libmicroros`). |
 
 ---
 

@@ -1,5 +1,7 @@
 # Arquitectura
 
+Las rutas de archivos (`firmware/…`, `example/…`) son relativas a la carpeta **`LABS/`** del repositorio.
+
 ## Flujo de datos
 
 1. **HC-SR04** — El firmware dispara `TRIG`, mide el ancho de pulso en `ECHO` y convierte a metros (`firmware/src/ultrasonic.c`).

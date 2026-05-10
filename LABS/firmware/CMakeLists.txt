@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libmicroros/libmicroros.a")
-  message(FATAL_ERROR "Falta libmicroros. Genera la carpeta firmware/libmicroros con micro_ros_config/build_libmicroros.sh (ver README.md).")
+  message(FATAL_ERROR "Falta libmicroros. Genera LABS/firmware/libmicroros con micro_ros_config/build_libmicroros.sh (ver README.md en la raíz del repositorio).")
 endif()
 
 link_directories(libmicroros)

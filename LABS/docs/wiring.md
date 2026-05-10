@@ -1,5 +1,7 @@
 # Cableado HC-SR04 ↔ Raspberry Pi Pico 2 W
 
+Las rutas de firmware citadas están bajo **`LABS/firmware/`** en el repositorio.
+
 ## Conexión básica
 
 | HC-SR04 | Pico 2 W |

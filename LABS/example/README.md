@@ -4,11 +4,11 @@ Firmware **independiente** del proyecto ultrasónico: solo comprueba **USB-seria
 
 ## Requisitos
 
-- Misma base que el firmware principal: `PICO_SDK_PATH`, toolchain ARM, `libmicroros` ya generada en [`../firmware/libmicroros`](../firmware/libmicroros) (ver [README raíz](../README.md) sección *Generar libmicroros*).
+- Misma base que el firmware principal: `PICO_SDK_PATH`, toolchain ARM, `libmicroros` ya generada en [`../firmware/libmicroros`](../firmware/libmicroros) (ver [README del repositorio](../../README.md) sección *Generar libmicroros*).
 
 ## Compilar
 
-Desde la raíz del repositorio:
+Desde la carpeta **`LABS/`** (laboratorio dentro del clon):
 
 ```bash
 export PICO_SDK_PATH=/ruta/al/pico-sdk
@@ -44,6 +44,6 @@ Deberías ver el campo `data` del `Int32` incrementándose aproximadamente cada 
 
 ## WSL2, Distrobox y entornos
 
-Guía paso a paso (Windows + WSL2, Arch nativo, Arch + Distrobox Ubuntu, Cursor/VS Code): sección **Ruta A / B / C** del [README raíz](../README.md).
+Guía paso a paso (Windows + WSL2, Arch nativo, Arch + Distrobox Ubuntu, Cursor/VS Code): sección **Ruta A / B / C** del [README del repositorio](../../README.md).
 
 En WSL2 el USB-serial de la Pico debe estar **reenviado** con **usbipd-win**; sin eso no verás `/dev/ttyACM0` en WSL.

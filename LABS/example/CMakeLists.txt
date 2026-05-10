@@ -16,7 +16,7 @@ pico_sdk_init()
 
 set(MICROROS_LIB "${FW_ROOT}/libmicroros/libmicroros.a")
 if(NOT EXISTS "${MICROROS_LIB}")
-  message(FATAL_ERROR "Falta libmicroros. Ejecuta firmware/micro_ros_config/build_libmicroros.sh (ver README.md raíz).")
+  message(FATAL_ERROR "Falta libmicroros. Ejecuta LABS/firmware/micro_ros_config/build_libmicroros.sh desde LABS/ (ver README.md en la raíz del repositorio).")
 endif()
 
 link_directories("${FW_ROOT}/libmicroros")
