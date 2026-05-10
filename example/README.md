@@ -42,10 +42,8 @@ Modo BOOTSEL y copiar `pico_link_check.uf2` al volumen de la placa.
 
 Deberías ver el campo `data` del `Int32` incrementándose aproximadamente cada segundo.
 
-## WSL2 (Windows)
+## WSL2, Distrobox y entornos
 
-En WSL2 hace falta que el dispositivo USB-serial de la Pico esté **reenviado** al invorno Linux (p. ej. con **usbipd-win** en Windows). Sin eso, `/dev/ttyACM0` no existirá en WSL y el agente no conectará.
+Guía paso a paso (Windows + WSL2, Arch nativo, Arch + Distrobox Ubuntu, Cursor/VS Code): sección **Ruta A / B / C** del [README raíz](../README.md).
 
-## Distrobox / Ubuntu
-
-Mismo flujo: ROS 2 Humble y el agente en el contenedor o máquina donde corre `ros2`, con acceso al dispositivo serie correcto.
+En WSL2 el USB-serial de la Pico debe estar **reenviado** con **usbipd-win**; sin eso no verás `/dev/ttyACM0` en WSL.
