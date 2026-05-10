@@ -1,0 +1,11 @@
+example/build/
+firmware/build/
+firmware/libmicroros/*.a
+firmware/libmicroros/include/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+**/__pycache__/
+*.pyc
+.venv/
+ROS2-MICRO-ROS-LEARNING-HUB/
